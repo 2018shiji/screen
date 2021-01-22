@@ -2,6 +2,8 @@ package com.product.screen;
 
 import com.product.screen.entity.ClientConfig;
 import com.product.screen.entity.ServerConfig;
+import com.product.screen.entity.WebClientCfg;
+import com.product.screen.entity.WebServerCfg;
 import com.product.screen.tool.XmlUtil;
 import com.product.screen.tool.NodeInitTool;
 import org.junit.jupiter.api.Test;
@@ -17,8 +19,8 @@ class ScreenApplicationTests {
     private XmlUtil xmlUtil;
     @Autowired
     ScreenNavigator navigator;
-    private ClientConfig clientConfig =  NodeInitTool.initClient();
-    private ServerConfig serverConfig = NodeInitTool.initServer();
+    private WebClientCfg clientConfig =  NodeInitTool.initClient();
+    private WebServerCfg serverConfig = NodeInitTool.initServer();
 
     @Test
     void contextLoads() {
