@@ -10,11 +10,15 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class PlayItem {
+public class PlayCfgItem {
+    @JSONField(name = "selected")
+    private boolean selected = false;
     @JSONField(name = "mrl")
     private String mrl;
-    @JSONField(name = "description")
-    private String description;
+    @JSONField(name = "title")
+    private String title;
     @JSONField(name = "options")
     private String options;
+    @JSONField(name = "volume")
+    private int volume;
 }

@@ -31,6 +31,10 @@ public class WebServerCfg {
             List<ServerConfig.Node> cfgNodes = appNodes.getNodes();
             cfgNodes.stream().forEach(item -> nodes.add(new Node(item)));
         }
+
+        public AppNodes(List<Node> nodes){
+            this.nodes = nodes;
+        }
     }
 
     @Data
@@ -68,6 +72,7 @@ public class WebServerCfg {
     @Data
     @NoArgsConstructor
     public static class Node{
+        private boolean selected = false;
         private String id = "";
         private String type = "";
         private String wallMode = "";

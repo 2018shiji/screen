@@ -97,9 +97,9 @@ public class ServerConfig {
         @XmlAttribute(name = "NAME")
         private String name = "";
         @XmlAttribute(name = "TITLES")
-        private String titles;
+        private String titles = "";
         @XmlAttribute(name = "EXEFILE")
-        private String exeFile;
+        private String exeFile = "";
         @XmlAttribute(name = "TYPE")
         private String type = "";
         @XmlAttribute(name = "WALLMODE")
@@ -123,8 +123,8 @@ public class ServerConfig {
     @XmlType(name = "Server")
     @NoArgsConstructor
     public static class Server {
-        @XmlAttribute(name = "Name")
-        private String name = "";
+        @XmlAttribute(name = "NAME")
+        private String name = "演示电脑";
         @XmlAttribute(name = "Service")
         private String service = "";
 

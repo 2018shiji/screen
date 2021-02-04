@@ -9,8 +9,12 @@ import com.product.screen.tool.NodeInitTool;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.util.StringUtils;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 @SpringBootTest
@@ -79,5 +83,21 @@ class ScreenApplicationTests {
     @Test
     void testNavigatorSCC(){
         navigator.setClientConfig(NodeInitTool.initClient());
+    }
+
+    @Test
+    void testToString(){
+        List<String> test = Arrays.asList("12","23","34");
+        String testStr = test.toString();
+        System.out.println(testStr);
+        String[] strings = StringUtils.commaDelimitedListToStringArray(testStr.substring(1, testStr.length() - 1));
+        List<String> stringList = Arrays.asList(strings);
+        System.out.println(stringList);
+    }
+
+    @Test
+    void testStrTrim(){
+        String test = "   38474    ";
+        System.out.println(test.trim());
     }
 }
