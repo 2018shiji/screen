@@ -1,16 +1,25 @@
 package com.product.screen;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.google.common.io.CharStreams;
+import com.google.common.io.Files;
+import com.google.common.io.Resources;
 import com.product.screen.entity.*;
 import com.product.screen.tool.XmlUtil;
 import com.product.screen.wsInteract.ServiceInteract;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.io.File;
+import javax.annotation.PostConstruct;
+import java.io.*;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,11 +32,26 @@ public class ScreenNavigator {
     private XmlUtil xmlUtil;
     @Autowired
     private ServiceInteract serviceInteract;
+    @Autowired
+    Navigator navigator;
 
 //    private String serverCfgDir = "D:\\CMHIT\\ScreenControl\\HXF6\\";
-    private String serverCfgDir = "C:\\Users\\lizhuangjie.chnet\\Desktop\\server\\";
+//    private String serverCfgDir = "C:\\Users\\lizhuangjie.chnet\\Desktop\\server\\";
 //    private String clientCfgDir = "C:\\Users\\admin\\Desktop\\ScreenServiceHost\\";
-    private String clientCfgDir = "C:\\Users\\lizhuangjie.chnet\\Desktop\\client\\";
+//    private String clientCfgDir = "C:\\Users\\lizhuangjie.chnet\\Desktop\\client\\";
+
+    private String serverCfgDir = "";
+    private String clientCfgDir = "";
+
+    @PostConstruct
+    public void initScreenNavigator () {
+        GlobalConfig globalConfig = new GlobalConfig();
+        try {
+            globalConfig = navigator.getGlobalConfig() == null ? globalConfig : navigator.getGlobalConfig();
+        }catch (Exception e){e.printStackTrace();}
+        serverCfgDir = globalConfig.getServerCfgUrl();
+        clientCfgDir = globalConfig.getClientCfgUrl();
+    }
 
     @ResponseBody
     @RequestMapping("setClientConfig")
@@ -158,6 +182,8 @@ public class ScreenNavigator {
         serviceInteract.resetServerIIS();
     }
 
+
+
     private ClientConfig getClientPlanNodesFromPool(WebClientCfg webClientCfg){
         List<String> ids = new ArrayList<>();
         List<WebClientCfg.Node> nodes = webClientCfg.getNodes();
@@ -235,4 +261,5 @@ public class ScreenNavigator {
         videoMap.put("url", videoUrls);
         serviceInteract.initAllVideo(videoMap);
     }
+
 }

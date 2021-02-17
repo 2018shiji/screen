@@ -23,6 +23,8 @@ public class WebVideoController {
     private PlayCfgItem playingItem;
     private int videoIndex;
     private Timer timer;
+//    private String videoListUrl = "C:\\Users\\lizhuangjie.chnet\\Desktop\\工作内容\\JsonWriter.txt";
+    private String videoListUrl = "";
 
     public void setPlayingItemList(List<PlayCfgItem> playingItemList){
         this.playingItemList = playingItemList;
@@ -35,16 +37,15 @@ public class WebVideoController {
     public void initWebVideoController(EmbeddedMediaPlayerComponent mediaPlayerComponent, JPanel controlsPanel){
         this.mediaPlayerComponent = mediaPlayerComponent;
         this.controlsPanel = controlsPanel;
-        this.controlsPanel.setVisible(false);
         playCfgItemList = new ArrayList<>();
     }
 
-    public void visibleControlsPanel(){
-        this.controlsPanel.setVisible(true);
+    public void setVideoListUrl(String videoListUrl){
+        this.videoListUrl = videoListUrl;
     }
 
-    public void invisibleControlsPanel(){
-        this.controlsPanel.setVisible(false);
+    public String getVideoListUrl(){
+        return videoListUrl;
     }
 
     /**
@@ -76,7 +77,7 @@ public class WebVideoController {
                     startVideo(videoIndex);
                 }
             }
-        }, 0, 1000);
+        }, 0, 500);
     }
 
     public void startVideo(int videoIndex){
@@ -91,6 +92,14 @@ public class WebVideoController {
         setVolume(playingItem.getVolume());
         mediaPlayerComponent.mediaPlayer().media().start(playingItem.getMrl(), playingItem.getOptions());
 
+    }
+
+    // pause by original swingWorker thread
+    public void startPauseAtLastFrame(){
+        System.out.println("9999999999990000000000000000000000");
+        if(videoIndex == playingItemList.size()) {
+            mediaPlayerComponent.mediaPlayer().controls().pause();
+        }
     }
 
     public void setVideoIndex(int videoIndex){
@@ -122,7 +131,12 @@ public class WebVideoController {
             this.playCfgItemList = playCfgItemList;
             System.out.println(playCfgItemList);
 
-            File file = new File("C:\\Users\\lizhuangjie.chnet\\Desktop\\工作内容\\JsonWriter.txt");
+            File file = new File(videoListUrl);
+            if(!file.exists()){
+                try{
+                    file.createNewFile();
+                } catch (Exception e) { e.printStackTrace(); }
+            }
             FileWriter fileWriter = new FileWriter(file);
 
             String s = JSON.toJSONString(playCfgItemList);
@@ -145,7 +159,7 @@ public class WebVideoController {
         List<PlayCfgItem> playCfgItems = new ArrayList<>();
         try {
             String s1 = Files.asCharSource(
-                    new File("C:\\Users\\lizhuangjie.chnet\\Desktop\\工作内容\\JsonWriter.txt"), Charset.forName("utf-8")
+                    new File(videoListUrl), Charset.forName("utf-8")
             ).read();
             playCfgItems = JSON.parseArray(s1, PlayCfgItem.class);
 

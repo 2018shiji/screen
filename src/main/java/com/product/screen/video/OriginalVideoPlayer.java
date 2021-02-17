@@ -29,6 +29,10 @@ public class OriginalVideoPlayer {
 
     private JProgressBar progressBar;
 
+    private JPanel contentPane;
+
+    private JPanel controlsPane;
+
     private EmbeddedMediaPlayerComponent mediaPlayerComponent;
 
     @Autowired
@@ -47,18 +51,20 @@ public class OriginalVideoPlayer {
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
             frame.addWindowListener(new WindowAdapter() {
+
                 @Override
                 public void windowClosing(WindowEvent e) {
                     mediaPlayerComponent.release();
                 }
             });
 
-            JPanel contentPane = new JPanel();
+
+            contentPane = new JPanel();
             contentPane.setLayout(new BorderLayout());
 
             contentPane.add(mediaPlayerComponent, BorderLayout.CENTER);
 
-            JPanel controlsPane = new JPanel();
+            controlsPane = new JPanel();
             pauseButton = new JButton("Pause");
             controlsPane.add(pauseButton);
             rewindButton = new JButton("Rewind");
@@ -71,6 +77,7 @@ public class OriginalVideoPlayer {
             progressBar = new JProgressBar();
             progressBar.setFocusable(false);
             controlsPane.add(progressBar, BorderLayout.NORTH);
+            controlsPane.setVisible(true);
 
             contentPane.add(controlsPane, BorderLayout.SOUTH);
 
@@ -113,6 +120,7 @@ public class OriginalVideoPlayer {
             });
 
             progressBar.addMouseListener(new MouseAdapter() {
+
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     int x = e.getX();
@@ -129,7 +137,10 @@ public class OriginalVideoPlayer {
                         long curr = mediaPlayerComponent.mediaPlayer().status().time();
                         float percent = (float) curr / total;
                         progressBar.setValue((int) (percent * 100));
-                        Thread.sleep(500);
+                        if(percent > 0.98) {
+                            webVideoController.startPauseAtLastFrame();
+                        }
+                        Thread.sleep(200);
                     }
                 }
             }.execute();
@@ -137,7 +148,7 @@ public class OriginalVideoPlayer {
             GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
             GraphicsDevice vc = env.getDefaultScreenDevice();
 
-            frame.setUndecorated(true);
+//            frame.setUndecorated(true);
             frame.setResizable(false);
 
             frame.setContentPane(contentPane);
@@ -148,7 +159,6 @@ public class OriginalVideoPlayer {
             mediaPlayerComponent.mediaPlayer().fullScreen().set(true);
 
             webVideoController.initWebVideoController(mediaPlayerComponent, controlsPane);
-            System.out.println(controlsPane.getComponent(4));
         }
     }
 

@@ -1,5 +1,7 @@
 package com.product.screen;
 
+import com.google.common.io.CharStreams;
+import com.google.common.io.Resources;
 import com.product.screen.entity.ClientConfig;
 import com.product.screen.entity.ServerConfig;
 import com.product.screen.entity.WebClientCfg;
@@ -9,10 +11,15 @@ import com.product.screen.tool.NodeInitTool;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.StringUtils;
 
+import java.io.BufferedInputStream;
 import java.io.File;
-import java.util.ArrayList;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 
@@ -99,5 +106,33 @@ class ScreenApplicationTests {
     void testStrTrim(){
         String test = "   38474    ";
         System.out.println(test.trim());
+    }
+
+    @Test
+    void testGuavaResources() {
+        try {
+            URL globalCfg = Resources.getResource("globalCfg");
+            String path = globalCfg.getPath();
+            System.out.println(path);
+            BufferedInputStream content = (BufferedInputStream)globalCfg.getContent();
+            String result = CharStreams.toString(new InputStreamReader(content, Charset.forName("UTF-8")));
+            System.out.println(result);
+
+            File file = new File(path);
+            System.out.println(file);
+            if(!file.exists()){
+                try{
+                    boolean newFile = file.createNewFile();
+                    System.out.println(newFile);
+                } catch (Exception e){e.printStackTrace();}
+            }
+
+        }catch (Exception e){e.printStackTrace();}
+    }
+
+    @Test
+    void testClasspathResource() throws IOException {
+        File global = new ClassPathResource("globalCfg").getFile();
+
     }
 }
